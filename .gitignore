@@ -16,3 +16,11 @@ android/capacitor-cordova-android-plugins/
 # Deployment
 tcm-diagnosis-deploy.tar.gz
 tcm-diagnosis-deploy/
+
+# Capacitor/iOS
+ios/App/build/
+ios/App/Pods/
+ios/App/.xcworkspace/
+ios/App/Package.resolved
+*.xcuserdata
+*.xcworkspace
