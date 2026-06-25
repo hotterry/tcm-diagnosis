@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>倪海厦中医体系</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <h1>倪海厦中医</h1>
+    <p class="subtitle">经方 · 针灸 · 经典</p>
+  </div>
+  <ul class="nav-list">
+    <li class="nav-section">
+      <span class="section-label">诊断体系</span>
+      <ul class="nav-sub">
+        <li><a href="#" data-page="diagnosis">🔍 诊断助手</a></li>
+        <li><a href="#" data-page="pulse">🫀 脉象查询</a></li>
+        <li><a href="#" data-page="six-jing">☯ 六经辨证</a></li>
+        <li><a href="#" data-page="eight-principle">⚖ 八纲辩证</a></li>
+      </ul>
+    </li>
+    <li class="nav-section">
+      <span class="section-label">方药</span>
+      <ul class="nav-sub">
+        <li><a href="#" data-page="formulas">💊 方剂速查</a></li>
+        <li><a href="#" data-page="herbs">🌿 药物手册</a></li>
+      </ul>
+    </li>
+    <li class="nav-section">
+      <span class="section-label">针灸</span>
+      <ul class="nav-sub">
+        <li><a href="#" data-page="meridians">🔗 经络循行</a></li>
+        <li><a href="#" data-page="acupuncture">📍 针灸穴位</a></li>
+      </ul>
+    </li>
+    <li class="nav-section">
+      <span class="section-label">经典原文</span>
+      <ul class="nav-sub">
+        <li><a href="#" data-page="shanghan">📕 伤寒论</a></li>
+        <li><a href="#" data-page="jinkui">📗 金匮要略</a></li>
+        <li><a href="#" data-page="neijing">📘 黄帝内经</a></li>
+        <li><a href="#" data-page="shennong">📙 神农本草经</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<main id="main-content">
+  <header id="topbar">
+    <button id="menu-toggle" class="icon-btn" title="切换菜单">☰</button>
+    <h2 id="page-title">首页</h2>
+    <div class="topbar-actions">
+      <input type="text" id="search-input" placeholder="搜索..." class="search-box">
+    </div>
+  </header>
+
+  <!-- Home -->
+  <div id="page-home" class="page active">
+    <div class="hero">
+      <div class="hero-content">
+        <h1>倪海厦中医体系</h1>
+        <p>经方 · 针灸 · 经典</p>
+        <p class="hero-desc">以倪海厦经方体系为核心，整合六经辨证、八纲辩证、方药、针灸与经典原文</p>
+      </div>
+    </div>
+    <div class="quick-links">
+      <h3>知识体系</h3>
+      <div class="card-grid">
+        <div class="card" data-nav="diagnosis"><div class="card-icon">🔍</div><h4>诊断助手</h4><p>症状→证型→方剂推理</p></div>
+        <div class="card" data-nav="six-jing"><div class="card-icon">☯</div><h4>六经辨证</h4><p>太阳·阳明·少阳·太阴·少阴·厥阴</p></div>
+        <div class="card" data-nav="eight-principle"><div class="card-icon">⚖</div><h4>八纲辩证</h4><p>阴阳·表里·寒热·虚实</p></div>
+        <div class="card" data-nav="formulas"><div class="card-icon">💊</div><h4>方剂速查</h4><p>组成·剂量·煎服法·禁忌</p></div>
+        <div class="card" data-nav="herbs"><div class="card-icon">🌿</div><h4>药物手册</h4><p>性味·归经·主治·配伍</p></div>
+        <div class="card" data-nav="pulse"><div class="card-icon">🫀</div><h4>脉象查询</h4><p>28种脉象·形态·主病</p></div>
+        <div class="card" data-nav="acupuncture"><div class="card-icon">📍</div><h4>针灸穴位</h4><p>361穴位·定位·主治·操作</p></div>
+        <div class="card" data-nav="meridians"><div class="card-icon">🔗</div><h4>经络循行</h4><p>十二经脉·奇经八脉</p></div>
+        <div class="card" data-nav="shanghan"><div class="card-icon">📕</div><h4>伤寒论</h4><p>397条原文·方证对应</p></div>
+        <div class="card" data-nav="jinkui"><div class="card-icon">📗</div><h4>金匮要略</h4><p>杂病篇次·方证对应</p></div>
+        <div class="card" data-nav="neijing"><div class="card-icon">📘</div><h4>黄帝内经</h4><p>素问·灵枢·中医根基</p></div>
+        <div class="card" data-nav="shennong"><div class="card-icon">📙</div><h4>神农本草经</h4><p>上中下三品·三百六十五药</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Diagnosis Assistant -->
+  <div id="page-diagnosis" class="page">
+    <div class="diagnosis-container">
+      <h3>症状采集</h3>
+      <p class="hint">请勾选患者出现的症状，系统将逐步缩小辨证范围</p>
+      <div class="symptom-groups">
+        <div class="symptom-group">
+          <h4>表证</h4>
+          <label><input type="checkbox" class="symptom" value="恶寒"> 恶寒<span class="plain">（怕冷）</span></label>
+          <label><input type="checkbox" class="symptom" value="发热"> 发热<span class="plain">（发烧）</span></label>
+          <label><input type="checkbox" class="symptom" value="恶风"> 恶风<span class="plain">（怕风）</span></label>
+          <label><input type="checkbox" class="symptom" value="无汗"> 无汗<span class="plain">（不出汗）</span></label>
+          <label><input type="checkbox" class="symptom" value="汗出"> 汗出<span class="plain">（出汗）</span></label>
+          <label><input type="checkbox" class="symptom" value="脉浮"> 脉浮<span class="plain">（轻按即感脉搏）</span></label>
+        </div>
+        <div class="symptom-group">
+          <h4>半表半里</h4>
+          <label><input type="checkbox" class="symptom" value="口苦"> 口苦<span class="plain">（嘴里发苦）</span></label>
+          <label><input type="checkbox" class="symptom" value="咽干"> 咽干<span class="plain">（喉咙干）</span></label>
+          <label><input type="checkbox" class="symptom" value="目眩"> 目眩<span class="plain">（眼花头晕）</span></label>
+          <label><input type="checkbox" class="symptom" value="胸胁苦满"> 胸胁苦满<span class="plain">（胸口两肋胀闷）</span></label>
+          <label><input type="checkbox" class="symptom" value="心烦"> 心烦<span class="plain">（心里烦躁）</span></label>
+          <label><input type="checkbox" class="symptom" value="喜呕"> 喜呕<span class="plain">（容易恶心）</span></label>
+          <label><input type="checkbox" class="symptom" value="往来寒热"> 往来寒热<span class="plain">（忽冷忽热交替）</span></label>
+        </div>
+        <div class="symptom-group">
+          <h4>里热证</h4>
+          <label><input type="checkbox" class="symptom" value="大热"> 大热<span class="plain">（高热不退）</span></label>
+          <label><input type="checkbox" class="symptom" value="大汗"> 大汗<span class="plain">（大量出汗）</span></label>
+          <label><input type="checkbox" class="symptom" value="大渴"> 大渴<span class="plain">（口渴厉害）</span></label>
+          <label><input type="checkbox" class="symptom" value="脉洪大"> 脉洪大<span class="plain">（脉搏宽大有力）</span></label>
+          <label><input type="checkbox" class="symptom" value="便秘"> 便秘<span class="plain">（大便干结不通）</span></label>
+          <label><input type="checkbox" class="symptom" value="谵语"> 谵语<span class="plain">（说胡话）</span></label>
+          <label><input type="checkbox" class="symptom" value="潮热"> 潮热<span class="plain">（定时发热如潮水）</span></label>
+        </div>
+        <div class="symptom-group">
+          <h4>里寒证</h4>
+          <label><input type="checkbox" class="symptom" value="畏寒肢冷"> 畏寒肢冷<span class="plain">（怕冷手脚凉）</span></label>
+          <label><input type="checkbox" class="symptom" value="下利清谷"> 下利清谷<span class="plain">（腹泻有未消化食物）</span></label>
+          <label><input type="checkbox" class="symptom" value="呕吐清水"> 呕吐清水<span class="plain">（吐清水）</span></label>
+          <label><input type="checkbox" class="symptom" value="小便清长"> 小便清长<span class="plain">（尿多色清）</span></label>
+          <label><input type="checkbox" class="symptom" value="脉微细"> 脉微细<span class="plain">（脉搏微弱细小）</span></label>
+          <label><input type="checkbox" class="symptom" value="但欲寐"> 但欲寐<span class="plain">（总想睡没精神）</span></label>
+        </div>
+        <div class="symptom-group">
+          <h4>脾胃证</h4>
+          <label><input type="checkbox" class="symptom" value="腹胀"> 腹胀<span class="plain">（肚子胀）</span></label>
+          <label><input type="checkbox" class="symptom" value="食欲不振"> 食欲不振<span class="plain">（不想吃东西）</span></label>
+          <label><input type="checkbox" class="symptom" value="恶心呕吐"> 恶心呕吐<span class="plain">（反胃想吐）</span></label>
+          <label><input type="checkbox" class="symptom" value="便溏"> 便溏<span class="plain">（大便稀软不成形）</span></label>
+          <label><input type="checkbox" class="symptom" value="痞满"> 痞满<span class="plain">（胃堵闷不通畅）</span></label>
+          <label><input type="checkbox" class="symptom" value="腹满而吐"> 腹满而吐<span class="plain">（肚子胀满并呕吐）</span></label>
+        </div>
+        <div class="symptom-group">
+          <h4>疼痛</h4>
+          <label><input type="checkbox" class="symptom" value="头痛"> 头痛<span class="plain">（头疼）</span></label>
+          <label><input type="checkbox" class="symptom" value="身痛"> 身痛<span class="plain">（全身酸痛）</span></label>
+          <label><input type="checkbox" class="symptom" value="胸痛"> 胸痛<span class="plain">（胸口疼）</span></label>
+          <label><input type="checkbox" class="symptom" value="胁痛"> 胁痛<span class="plain">（两肋疼）</span></label>
+          <label><input type="checkbox" class="symptom" value="腹痛拒按"> 腹痛拒按<span class="plain">（肚子疼不让碰）</span></label>
+          <label><input type="checkbox" class="symptom" value="少腹痛"> 少腹痛<span class="plain">（小肚子疼）</span></label>
+          <label><input type="checkbox" class="symptom" value="腰痛"> 腰痛<span class="plain">（腰疼）</span></label>
+          <label><input type="checkbox" class="symptom" value="关节痛"> 关节痛<span class="plain">（关节疼）</span></label>
+          <label><input type="checkbox" class="symptom" value="咽痛"> 咽痛<span class="plain">（嗓子疼）</span></label>
+          <label><input type="checkbox" class="symptom" value="胃痛"> 胃痛<span class="plain">（胃疼）</span></label>
+          <label><input type="checkbox" class="symptom" value="脐周痛"> 脐周痛<span class="plain">（肚脐周围疼）</span></label>
+        </div>
+        <div class="symptom-group">
+          <h4>其他</h4>
+          <label><input type="checkbox" class="symptom" value="失眠"> 失眠<span class="plain">（睡不着）</span></label>
+          <label><input type="checkbox" class="symptom" value="心悸"> 心悸<span class="plain">（心慌心跳）</span></label>
+          <label><input type="checkbox" class="symptom" value="咳嗽"> 咳嗽<span class="plain">（咳）</span></label>
+          <label><input type="checkbox" class="symptom" value="痰多"> 痰多<span class="plain">（痰多）</span></label>
+          <label><input type="checkbox" class="symptom" value="眩晕"> 眩晕<span class="plain">（天旋地转的头晕）</span></label>
+          <label><input type="checkbox" class="symptom" value="水肿"> 水肿<span class="plain">（身体浮肿）</span></label>
+          <label><input type="checkbox" class="symptom" value="消渴"> 消渴<span class="plain">（又渴又尿多消瘦）</span></label>
+          <label><input type="checkbox" class="symptom" value="气上撞心"> 气上撞心<span class="plain">（有气从肚子冲上心口）</span></label>
+        </div>
+      </div>
+      <div class="diagnosis-actions">
+        <button id="analyze-btn" class="btn-primary">分析辨证</button>
+        <button id="reset-btn" class="btn-secondary">重置</button>
+      </div>
+      <div id="diagnosis-result" class="result-panel" style="display:none;">
+        <h3>辨证结果</h3>
+        <div id="result-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pulse Diagnosis -->
+  <div id="page-pulse" class="page">
+    <div class="pulse-container">
+      <h3>脉象查询</h3>
+      <p class="hint">中医二十八脉象速查，包括形态特征、主病及临床意义。</p>
+      <div class="search-bar">
+        <input type="text" id="pulse-search" placeholder="搜索脉象名称或主病...">
+      </div>
+      <div class="pulse-category-nav">
+        <button class="pulse-cat-btn active" data-cat="all">全部</button>
+        <button class="pulse-cat-btn" data-cat="浮">浮脉类</button>
+        <button class="pulse-cat-btn" data-cat="沉">沉脉类</button>
+        <button class="pulse-cat-btn" data-cat="迟">迟脉类</button>
+        <button class="pulse-cat-btn" data-cat="数">数脉类</button>
+        <button class="pulse-cat-btn" data-cat="虚">虚脉类</button>
+        <button class="pulse-cat-btn" data-cat="实">实脉类</button>
+      </div>
+      <div id="pulse-list" class="pulse-grid"></div>
+    </div>
+  </div>
+
+  <!-- Six Jing Bian Zheng -->
+  <div id="page-six-jing" class="page">
+    <div class="sj-container">
+      <h3>六经辨证</h3>
+      <p class="hint">六经辨证是《伤寒论》的核心框架，将外感病分为六个层次，每一经都有其提纲证、病机特点和代表方剂。</p>
+      <div class="six-jing-grid">
+        <div class="sj-card" data-jing="sunyang">
+          <div class="sj-tag">太阳经</div>
+          <h4>太阳病</h4>
+          <p class="sj-type">表证 · 阳证 · 多气多血</p>
+          <ul class="sj-list">
+            <li>提纲：脉浮，头项强痛而恶寒</li>
+            <li>中风：汗出、恶风、脉浮缓 → 桂枝汤</li>
+            <li>伤寒：无汗、恶寒、脉浮紧 → 麻黄汤</li>
+            <li>郁热：烦躁、身热 → 大青龙汤</li>
+            <li>蓄水：小便不利、口渴 → 五苓散</li>
+            <li>蓄血：如狂、少腹急结 → 桃核承气汤</li>
+          </ul>
+        </div>
+        <div class="sj-card" data-jing="yangming">
+          <div class="sj-tag">阳明经</div>
+          <h4>阳明病</h4>
+          <p class="sj-type">里证 · 热证 · 实证 · 多气多血</p>
+          <ul class="sj-list">
+            <li>提纲：胃家实是也</li>
+            <li>经证：大热、大汗、大渴、脉洪大 → 白虎汤</li>
+            <li>腑证：潮热、谵语、腹满痛、便秘 → 承气汤类</li>
+            <li>湿热发黄：身黄、发热 → 茵陈蒿汤</li>
+          </ul>
+        </div>
+        <div class="sj-card" data-jing="shaoyang">
+          <div class="sj-tag">少阳经</div>
+          <h4>少阳病</h4>
+          <p class="sj-type">半表半里 · 阳证 · 少血少气</p>
+          <ul class="sj-list">
+            <li>提纲：口苦、咽干、目眩</li>
+            <li>主证：往来寒热、胸胁苦满、默默不欲饮食、心烦喜呕</li>
+            <li>主方：小柴胡汤</li>
+            <li>兼证：柴胡桂枝汤、大柴胡汤、柴胡加龙骨牡蛎汤</li>
+          </ul>
+        </div>
+        <div class="sj-card" data-jing="taiyin">
+          <div class="sj-tag">太阴经</div>
+          <h4>太阴病</h4>
+          <p class="sj-type">里证 · 虚证 · 寒证 · 脾虚湿盛</p>
+          <ul class="sj-list">
+            <li>提纲：腹满而吐，食不下，自利益甚，时腹自痛</li>
+            <li>病机：脾阳虚弱，寒湿内停</li>
+            <li>主方：理中汤（丸）</li>
+            <li>若下之，必胸下结硬</li>
+          </ul>
+        </div>
+        <div class="sj-card" data-jing="shaoyin">
+          <div class="sj-tag">少阴经</div>
+          <h4>少阴病</h4>
+          <p class="sj-type">里证 · 虚证 · 全身性虚寒/虚热</p>
+          <ul class="sj-list">
+            <li>提纲：脉微细，但欲寐</li>
+            <li>寒化证：四肢厥逆、下利清谷、脉微 → 四逆汤</li>
+            <li>热化证：心烦不得眠、舌红少苔 → 黄连阿胶汤</li>
+            <li>少阴咽痛：咽痛、痰涎 → 桔梗汤</li>
+          </ul>
+        </div>
+        <div class="sj-card" data-jing="jueyin">
+          <div class="sj-tag">厥阴经</div>
+          <h4>厥阴病</h4>
+          <p class="sj-type">里证 · 寒热错杂 · 厥热胜复</p>
+          <ul class="sj-list">
+            <li>提纲：消渴，气上撞心，心中疼热，饥而不欲食</li>
+            <li>蛔厥：吐蛔、手足厥冷 → 乌梅丸</li>
+            <li>寒热错杂：上热下寒 → 干姜黄芩黄连人参汤</li>
+            <li>厥阴提纲体现了阴阳交接、寒热错杂的特点</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Eight Principle -->
+  <div id="page-eight-principle" class="page">
+    <div class="ep-container">
+      <h3>八纲辨证</h3>
+      <p class="hint">八纲是一切辨证的总纲，阴阳为总纲中的总纲。倪海厦强调八纲是判断疾病性质的第一步。</p>
+      <div class="ep-grid">
+        <div class="ep-card">
+          <h4>阴 · 阳 <span class="ep-total">总纲中的总纲</span></h4>
+          <p class="ep-desc">辨别疾病的基本属性</p>
+          <div class="ep-split">
+            <div class="ep-side yang-side">
+              <h5>阳</h5>
+              <ul><li>表证、热证、实证</li><li>发热、面赤、声高气粗</li><li>脉浮、数、洪、滑</li><li>动、躁、明亮</li></ul>
+            </div>
+            <div class="ep-side yin-side">
+              <h5>阴</h5>
+              <ul><li>里证、寒证、虚证</li><li>畏寒、面白、声低气微</li><li>脉沉、迟、细、弱</li><li>静、晦、暗淡</li></ul>
+            </div>
+          </div>
+        </div>
+        <div class="ep-card">
+          <h4>表 · 里</h4>
+          <p class="ep-desc">辨别病位的深浅</p>
+          <div class="ep-split">
+            <div class="ep-side yang-side">
+              <h5>表</h5>
+              <ul><li>外感初期，邪在皮毛</li><li>恶寒发热并见</li><li>脉浮，苔薄白</li><li>病轻浅，易治</li></ul>
+            </div>
+            <div class="ep-side yin-side">
+              <h5>里</h5>
+              <ul><li>病邪入里，在脏腑</li><li>不恶寒反恶热</li><li>脉沉，苔厚</li><li>病深重，难治</li></ul>
+            </div>
+          </div>
+        </div>
+        <div class="ep-card">
+          <h4>寒 · 热</h4>
+          <p class="ep-desc">辨别疾病的性质</p>
+          <div class="ep-split">
+            <div class="ep-side yang-side">
+              <h5>热</h5>
+              <ul><li>发热喜凉，面红目赤</li><li>口渴饮冷，小便短赤</li><li>大便燥结，舌红苔黄</li><li>脉数</li></ul>
+            </div>
+            <div class="ep-side yin-side">
+              <h5>寒</h5>
+              <ul><li>畏寒喜暖，面色苍白</li><li>口淡不渴，小便清长</li><li>大便溏泄，舌淡苔白</li><li>脉迟</li></ul>
+            </div>
+          </div>
+        </div>
+        <div class="ep-card">
+          <h4>虚 · 实</h4>
+          <p class="ep-desc">辨别邪正的盛衰</p>
+          <div class="ep-split">
+            <div class="ep-side yang-side">
+              <h5>实</h5>
+              <ul><li>邪气盛实</li><li>声高气粗，疼痛拒按</li><li>脉实有力</li><li>新病体壮</li></ul>
+            </div>
+            <div class="ep-side yin-side">
+              <h5>虚</h5>
+              <ul><li>正气不足</li><li>声低气微，疼痛喜按</li><li>脉虚无力</li><li>久病体弱</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulas -->
+  <div id="page-formulas" class="page">
+    <div class="formula-container">
+      <h3>方剂速查</h3>
+      <div class="search-bar">
+        <input type="text" id="formula-search" placeholder="搜索方剂名称或主治...">
+      </div>
+      <div id="formula-list" class="formula-grid"></div>
+    </div>
+  </div>
+
+  <!-- Herbs -->
+  <div id="page-herbs" class="page">
+    <div class="herb-container">
+      <h3>药物手册</h3>
+      <div class="search-bar">
+        <input type="text" id="herb-search" placeholder="搜索药名、性味、主治...">
+      </div>
+      <div id="herb-list" class="herb-grid"></div>
+    </div>
+  </div>
+
+  <!-- Acupuncture -->
+  <div id="page-acupuncture" class="page">
+    <div class="acu-container">
+      <h3>针灸穴位</h3>
+      <div class="acu-sidebar">
+        <h4>十二经脉</h4>
+        <ul id="meridian-list" class="acu-menu"></ul>
+        <h4>奇经八脉</h4>
+        <ul id="extra-meridian-list" class="acu-menu"></ul>
+      </div>
+      <div class="acu-main">
+        <h4 id="acu-meridian-title">请选择经络</h4>
+        <div id="acu-point-list" class="acu-point-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Meridians -->
+  <div id="page-meridians" class="page">
+    <div class="meridian-container">
+      <h3>经络循行</h3>
+      <p class="hint">十二经脉气血流注顺序：肺经→大肠经→胃经→脾经→心经→小肠经→膀胱经→肾经→心包经→三焦经→胆经→肝经→复注于肺</p>
+      <div id="meridian-detail" class="meridian-detail"></div>
+    </div>
+  </div>
+
+  <!-- Shanghan Lun -->
+  <div id="page-shanghan" class="page">
+    <div class="classic-container">
+      <h3>伤寒论</h3>
+      <p class="hint">张仲景著，397条，113方。六经辨证的基础经典。</p>
+      <div class="classic-nav">
+        <button class="classic-tab active" data-volume="1">太阳篇上</button>
+        <button class="classic-tab" data-volume="2">太阳篇下</button>
+        <button class="classic-tab" data-volume="3">阳明篇</button>
+        <button class="classic-tab" data-volume="4">少阳篇</button>
+        <button class="classic-tab" data-volume="5">太阴篇</button>
+        <button class="classic-tab" data-volume="6">少阴篇</button>
+        <button class="classic-tab" data-volume="7">厥阴篇</button>
+      </div>
+      <div id="classic-content" class="classic-content"></div>
+    </div>
+  </div>
+
+  <!-- Jinkui Yaolue -->
+  <div id="page-jinkui" class="page">
+    <div class="classic-container">
+      <h3>金匮要略</h3>
+      <p class="hint">张仲景著，论述内科杂病及部分外科、妇科病证。</p>
+      <div class="classic-nav">
+        <button class="classic-tab active" data-volume="1">脏腑经络先后</button>
+        <button class="classic-tab" data-volume="2">痉湿暍</button>
+        <button class="classic-tab" data-volume="3">百合狐惑阴阳毒</button>
+        <button class="classic-tab" data-volume="4">疟病</button>
+        <button class="classic-tab" data-volume="5">中风历节</button>
+        <button class="classic-tab" data-volume="6">血痹虚劳</button>
+        <button class="classic-tab" data-volume="7">肺痿肺痈咳嗽上气</button>
+        <button class="classic-tab" data-volume="8">奔豚气</button>
+        <button class="classic-tab" data-volume="9">胸痹心痛短气</button>
+        <button class="classic-tab" data-volume="10">腹满寒疝宿食</button>
+        <button class="classic-tab" data-volume="11">五脏风寒积聚</button>
+        <button class="classic-tab" data-volume="12">痰饮咳嗽</button>
+        <button class="classic-tab" data-volume="13">消渴小便不利淋病</button>
+        <button class="classic-tab" data-volume="14">水气病</button>
+        <button class="classic-tab" data-volume="15">黄疸病</button>
+      </div>
+      <div id="jinkui-content" class="classic-content"></div>
+    </div>
+  </div>
+
+  <!-- Huangdi Neijing -->
+  <div id="page-neijing" class="page">
+    <div class="classic-container">
+      <h3>黄帝内经</h3>
+      <p class="hint">分为《素问》和《灵枢》两部分，中医理论的奠基之作。</p>
+      <div class="classic-nav" id="neijing-nav">
+        <button class="classic-tab active" data-volume="1">上古天真论</button>
+        <button class="classic-tab" data-volume="2">四气调神大论</button>
+        <button class="classic-tab" data-volume="3">生气通天论</button>
+        <button class="classic-tab" data-volume="4">阴阳应象大论</button>
+        <button class="classic-tab" data-volume="5">灵兰秘典论</button>
+        <button class="classic-tab" data-volume="6">本神（灵枢）</button>
+      </div>
+      <div id="neijing-content" class="classic-content"></div>
+    </div>
+  </div>
+
+  <!-- Shennong Bencao Jing -->
+  <div id="page-shennong" class="page">
+    <div class="classic-container">
+      <h3>神农本草经</h3>
+      <p class="hint">中国现存最早的药物学专著，收录药物365种，分上、中、下三品。</p>
+      <div class="classic-nav" id="shennong-nav">
+        <button class="classic-tab active" data-volume="1">上品·玉石部</button>
+        <button class="classic-tab" data-volume="2">上品·草部</button>
+        <button class="classic-tab" data-volume="3">中品·草部</button>
+        <button class="classic-tab" data-volume="4">下品·草部</button>
+        <button class="classic-tab" data-volume="5">中品·木部</button>
+      </div>
+      <div id="shennong-content" class="classic-content"></div>
+    </div>
+  </div>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
