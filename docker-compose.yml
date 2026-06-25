@@ -1,0 +1,8 @@
+version: "3.8"
+services:
+  tcm:
+    build: .
+    container_name: tcm-diagnosis
+    ports:
+      - "8765:80"
+    restart: unless-stopped

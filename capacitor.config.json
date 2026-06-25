@@ -1,0 +1,8 @@
+{
+  "appId": "com.tcm.diagnosis",
+  "appName": "倪海厦中医体系",
+  "webDir": "app",
+  "server": {
+    "androidScheme": "https"
+  }
+}

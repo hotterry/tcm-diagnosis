@@ -485,7 +485,9 @@ function runDiagnosis() {
         <h4>${i === 0 ? '🏆 ' : ''}${r.syndrome} — ${r.jing}</h4>
         <p>${r.explanation}</p>
         <p style="color:var(--text-dim);font-size:0.75rem;margin-top:4px;">匹配症状：${r.matched.join('、')}（${Math.round(r.ratio * 100)}% 匹配）</p>
-        ${r.formulas.map(f => `<span class="formula-tag">${f.name}</span>`).join(' ')}
+        <div class="formula-tags-row">
+          ${r.formulas.map(f => `<span class="formula-tag" onclick="goToFormula('${f.name}')" title="点击查看方剂详情">📋 ${f.name}</span>`).join(' ')}
+        </div>
         <div style="margin-top:8px;">
           ${r.formulas.map(f => `<p style="font-size:0.78rem;color:var(--text-dim);">💊 <strong>${f.name}</strong>：${f.usage}</p>`).join('')}
         </div>
@@ -494,6 +496,18 @@ function runDiagnosis() {
   });
 
   content.innerHTML = html;
+}
+
+// Navigate to formulas page and search for a specific formula
+function goToFormula(name) {
+  showPage('formulas');
+  setTimeout(() => {
+    const input = document.getElementById('formula-search');
+    if (input) {
+      input.value = name;
+      input.dispatchEvent(new Event('input'));
+    }
+  }, 100);
 }
 
 function resetDiagnosis() {
@@ -588,46 +602,82 @@ function renderPulses() {
 // ===== Formulas =====
 
 const formulasData = [
-  // Taiyang
-  { name: '桂枝汤', jing: '太阳', category: '解表剂·辛温解表', composition: '桂枝三两 芍药三两 甘草二两 生姜三两 大枣十二枚', usage: '解肌发表，调和营卫。用于太阳中风证。', contraindications: '表实无汗者忌用。' },
-  { name: '麻黄汤', jing: '太阳', category: '解表剂·辛温解表', composition: '麻黄三两 桂枝二两 杏仁七十个 甘草一两', usage: '发汗解表，宣肺平喘。用于太阳伤寒证。', contraindications: '表虚自汗、亡血家、疮家忌用。' },
-  { name: '大青龙汤', jing: '太阳', category: '解表剂', composition: '麻黄六两 桂枝二两 甘草二两 杏仁四十枚 石膏如鸡子大 生姜三两 大枣十枚', usage: '发汗解表，兼清里热。用于外寒内热烦躁。', contraindications: '脉微弱、汗出恶风者忌用。' },
-  { name: '小青龙汤', jing: '太阳', category: '解表剂', composition: '麻黄三两 桂枝三两 芍药三两 干姜三两 细辛三两 五味子半升 半夏半升 甘草三两', usage: '解表散寒，温肺化饮。用于外寒内饮。', contraindications: '阴虚干咳无痰者忌用。' },
-  { name: '五苓散', jing: '太阳', category: '利水渗湿剂', composition: '猪苓十八铢 泽泻一两六铢 白术十八铢 茯苓十八铢 桂枝半两', usage: '利水渗湿，温阳化气。用于膀胱蓄水证。', contraindications: '津液损伤者忌用。' },
-  { name: '桃核承气汤', jing: '太阳', category: '理血剂', composition: '桃仁五十个 大黄四两 桂枝二两 甘草二两 芒硝二两', usage: '破血逐瘀。用于太阳蓄血，少腹急结，如狂。', contraindications: '无瘀血者忌用。' },
-
-  // Yangming
-  { name: '白虎汤', jing: '阳明', category: '清热剂', composition: '知母六两 石膏一斤 甘草二两 粳米六合', usage: '清热生津。用于阳明经证大热大汗大渴脉洪大。', contraindications: '表证未解、血虚发热忌用。' },
-  { name: '大承气汤', jing: '阳明', category: '泻下剂', composition: '大黄四两 厚朴八两 枳实五枚 芒硝三合', usage: '峻下热结。用于阳明腑实便秘腹痛谵语。', contraindications: '体虚、孕妇忌用。' },
-  { name: '小承气汤', jing: '阳明', category: '泻下剂', composition: '大黄四两 厚朴二两 枳实三枚', usage: '轻下热结。用于阳明腑实轻证。', contraindications: '同大承气汤。' },
-  { name: '调胃承气汤', jing: '阳明', category: '泻下剂', composition: '大黄四两 甘草二两 芒硝半升', usage: '缓下热结。用于阳明燥热初结。', contraindications: '同大承气汤。' },
-  { name: '茵陈蒿汤', jing: '阳明', category: '利湿退黄剂', composition: '茵陈蒿六两 栀子十四枚 大黄二两', usage: '清热利湿退黄。用于阳明湿热发黄。', contraindications: '非湿热发黄者忌用。' },
-
-  // Shaoyang
-  { name: '小柴胡汤', jing: '少阳', category: '和解剂', composition: '柴胡八两 黄芩三两 人参三两 半夏半升 甘草三两 生姜三两 大枣十二枚', usage: '和解少阳。用于少阳病口苦咽干目眩胸胁苦满。', contraindications: '非少阳证者慎用。' },
-  { name: '大柴胡汤', jing: '少阳', category: '和解剂', composition: '柴胡八两 黄芩三两 芍药三两 半夏半升 生姜五两 枳实四枚 大黄二两 大枣十二枚', usage: '和解少阳，内泄热结。用于少阳阳明合病。', contraindications: '无阳明里实者忌用。' },
-  { name: '柴胡桂枝汤', jing: '少阳', category: '和解剂', composition: '柴胡四两 黄芩一两半 人参一两半 半夏二合半 甘草一两 桂枝一两半 芍药一两半 生姜一两半 大枣六枚', usage: '和解少阳，解表散邪。用于太阳少阳合病。', contraindications: '' },
-
-  // Taiyin
-  { name: '理中汤', jing: '太阴', category: '温里剂', composition: '人参 干姜 甘草 白术各三两', usage: '温中散寒，补气健脾。用于太阴病腹满吐利。', contraindications: '实热证者忌用。' },
-  { name: '半夏泻心汤', jing: '太阴', category: '消痞剂', composition: '半夏半升 黄芩 干姜 人参 甘草各三两 黄连一两 大枣十二枚', usage: '和胃降逆，消痞散结。用于心下痞满不痛。', contraindications: '' },
-
-  // Shaoyin
-  { name: '四逆汤', jing: '少阴', category: '温里剂', composition: '生附子一枚 干姜一两半 甘草二两', usage: '回阳救逆。用于少阴寒化四肢厥逆脉微。', contraindications: '真热假寒者忌用。' },
-  { name: '真武汤', jing: '少阴', category: '温里剂', composition: '茯苓 芍药 生姜各三两 白术二两 炮附子一枚', usage: '温阳利水。用于肾阳虚水泛水肿。', contraindications: '阴虚火旺者忌用。' },
-  { name: '黄连阿胶汤', jing: '少阴', category: '安神剂', composition: '黄连四两 黄芩二两 芍药二两 阿胶三两 鸡子黄二枚', usage: '滋阴降火，交通心肾。用于少阴热化心烦不眠。', contraindications: '阳虚寒证者忌用。' },
-  { name: '桔梗汤', jing: '少阴', category: '清热剂', composition: '桔梗一两 甘草二两', usage: '宣肺祛痰，利咽解毒。用于少阴咽痛。', contraindications: '' },
-
-  // Jueyin
-  { name: '乌梅丸', jing: '厥阴', category: '驱虫剂', composition: '乌梅三百枚 细辛六两 干姜十两 黄连十六两 当归四两 炮附子六两 蜀椒四两 桂枝六两 人参六两 黄柏六两', usage: '安蛔止痛，寒热并调。用于厥阴病吐蛔。', contraindications: '' },
-
-  // Others
-  { name: '炙甘草汤', jing: '太阳', category: '补益剂', composition: '炙甘草四两 生姜三两 人参二两 生地黄一斤 桂枝三两 阿胶二两 麦冬半升 麻仁半升 大枣三十枚', usage: '益气滋阴，通阳复脉。用于心动悸脉结代。', contraindications: '湿盛中满者忌用。' },
-  { name: '麻杏甘石汤', jing: '太阳', category: '解表剂', composition: '麻黄四两 杏仁五十个 石膏半斤 甘草二两', usage: '辛凉宣泄，清肺平喘。用于肺热咳喘。', contraindications: '风寒咳嗽者忌用。' },
-  { name: '芍药甘草汤', jing: '太阳', category: '补益剂', composition: '芍药四两 甘草四两', usage: '缓急止痛。用于脚挛急、腹痛。', contraindications: '' },
-  { name: '桂枝加附子汤', jing: '太阳', category: '补阳剂', composition: '桂枝汤加炮附子一枚', usage: '解表温阳。用于太阳病发汗太过，漏汗不止，恶风，小便难，四肢微急。', contraindications: '' },
+  // ===== 太阳病方 =====
+  { name: '桂枝汤', jing: '太阳', category: '解表剂·辛温解表', composition: '桂枝三两 芍药三两 甘草二两 生姜三两 大枣十二枚', usage: '解肌发表，调和营卫。太阳中风证发热汗出恶风脉浮缓。', neihanNote: '群方之冠。桂枝温通心阳，芍药敛阴和营，生姜大枣调营卫。' },
+  { name: '桂枝加葛根汤', jing: '太阳', category: '解表剂', composition: '桂枝汤加葛根四两', usage: '解肌舒筋。太阳中风兼项背强几几。', neihanNote: '葛根升津舒筋，专治项背拘急不舒。' },
+  { name: '桂枝加附子汤', jing: '太阳', category: '补阳剂', composition: '桂枝汤加炮附子一枚', usage: '温阳固表。太阳病发汗太过漏汗不止恶风小便难四肢微急。', neihanNote: '过汗亡阳，附子温经扶阳固表止汗。' },
+  { name: '桂枝去芍药汤', jing: '太阳', category: '解表剂', composition: '桂枝汤去芍药', usage: '通阳解表。太阳病下后脉促胸满。', neihanNote: '芍药酸收不利胸阳宣通，去之以畅胸中阳气。' },
+  { name: '桂枝加厚朴杏子汤', jing: '太阳', category: '解表剂', composition: '桂枝汤加厚朴二两 杏仁五十枚', usage: '解肌发表，降气平喘。太阳中风兼喘。', neihanNote: '厚朴杏仁降气，治宿喘新感并发。' },
+  { name: '桂枝麻黄各半汤', jing: '太阳', category: '解表剂', composition: '桂枝汤与麻黄汤各取半量合方', usage: '小发其汗。太阳病日久如疟状面有热色身痒。', neihanNote: '表郁轻证，小汗法。既不伤正又能散邪。' },
+  { name: '桂枝二越婢一汤', jing: '太阳', category: '解表剂', composition: '桂枝汤二分合越婢汤一分', usage: '微发汗兼清里热。太阳病发热恶寒热多寒少脉微弱。', neihanNote: '表寒里热轻证之方，外散表寒内清郁热。' },
+  { name: '麻黄汤', jing: '太阳', category: '解表剂·辛温解表', composition: '麻黄三两 桂枝二两 杏仁七十个 甘草一两', usage: '发汗解表，宣肺平喘。太阳伤寒恶寒发热无汗身痛脉浮紧。', neihanNote: '发汗峻剂。麻黄开腠理，桂枝助发汗。先煮麻黄去上沫。' },
+  { name: '葛根汤', jing: '太阳', category: '解表剂', composition: '葛根四两 麻黄三两 桂枝二两 芍药二两 甘草二两 生姜三两 大枣十二枚', usage: '发汗解表，升津舒筋。太阳伤寒项背强几几无汗恶风。', neihanNote: '葛根升津液濡筋脉，治项背拘急。太阳阳明合病下利用之。' },
+  { name: '葛根加半夏汤', jing: '太阳', category: '解表剂', composition: '葛根汤加半夏半升', usage: '发汗解表，降逆止呕。太阳阳明合病不下利但呕。', neihanNote: '' },
+  { name: '大青龙汤', jing: '太阳', category: '解表剂', composition: '麻黄六两 桂枝二两 甘草二两 杏仁四十枚 石膏如鸡子大 生姜三两 大枣十枚', usage: '发汗解表，兼清里热。外寒内热不汗出而烦躁。', neihanNote: '麻黄倍量发汗力极强。石膏清里热除烦。脉微弱汗出恶风者禁服。' },
+  { name: '小青龙汤', jing: '太阳', category: '解表剂', composition: '麻黄三两 桂枝三两 芍药三两 细辛三两 干姜三两 五味子半升 半夏半升 甘草三两', usage: '解表散寒，温肺化饮。外寒内饮干呕发热而咳。', neihanNote: '干姜细辛五味子为温肺化饮核心组合，散中有收。' },
+  { name: '五苓散', jing: '太阳', category: '利水渗湿剂', composition: '猪苓十八铢 泽泻一两六铢 白术十八铢 茯苓十八铢 桂枝半两', usage: '利水渗湿，温阳化气。太阳蓄水小便不利烦渴。', neihanNote: '桂枝通阳化气助膀胱气化。散剂白饮和服。' },
+  { name: '桃核承气汤', jing: '太阳', category: '理血剂', composition: '桃仁五十个 大黄四两 桂枝二两 甘草二两 芒硝二两', usage: '破血逐瘀。太阳蓄血少腹急结其人如狂。', neihanNote: '先解外后攻里。桃仁破血，大黄芒硝攻下瘀热。' },
+  { name: '麻杏甘石汤', jing: '太阳', category: '解表剂', composition: '麻黄四两 杏仁五十个 石膏半斤 甘草二两', usage: '辛凉宣泄，清肺平喘。汗出而喘无大热者。', neihanNote: '石膏倍麻黄，清肺热为主。肺热咳喘要方。' },
+  { name: '葛根黄芩黄连汤', jing: '太阳', category: '清热剂', composition: '葛根八两 黄芩三两 黄连三两 甘草二两', usage: '解表清里。桂枝证误下后利遂不止脉促喘而汗出。', neihanNote: '表未解而里热已陷，葛根解表升清，芩连清热止利。' },
+  { name: '桂枝甘草汤', jing: '太阳', category: '补阳剂', composition: '桂枝四两 甘草二两', usage: '温通心阳。发汗过多叉手自冒心心下悸欲得按。', neihanNote: '心阳虚心悸，桂枝甘草辛甘化阳。' },
+  { name: '苓桂术甘汤', jing: '太阳', category: '利水剂', composition: '茯苓四两 桂枝三两 白术二两 甘草二两', usage: '温阳化饮，健脾利水。心下逆满气上冲胸起则头眩。', neihanNote: '脾虚水停，温阳利水祖方。' },
+  { name: '芍药甘草附子汤', jing: '太阳', category: '补益剂', composition: '芍药三两 甘草三两 炮附子一枚', usage: '扶阳益阴。发汗病不解反恶寒。', neihanNote: '芍药甘草酸甘化阴，附子温阳，阴阳双补。' },
+  { name: '茯苓四逆汤', jing: '太阳', category: '温里剂', composition: '茯苓四两 人参一两 生附子一枚 甘草二两 干姜一两半', usage: '回阳益阴。发汗下后病不解烦躁。', neihanNote: '阴阳两虚烦躁，四逆回阳加参苓益气阴。' },
+  { name: '栀子豉汤', jing: '太阳', category: '清热剂', composition: '栀子十四枚 香豉四合', usage: '清热除烦。发汗吐下后虚烦不得眠心中懊恼。', neihanNote: '热扰胸膈虚烦，栀子清透郁热，豆豉宣散。' },
+  { name: '大陷胸汤', jing: '太阳', category: '泻下剂', composition: '大黄六两 芒硝一升 甘遂一钱匕', usage: '泻热逐水。结胸热实心下痛按之石硬脉沉紧。', neihanNote: '水热互结重证，甘遂峻下逐水。力峻慎用。' },
+  { name: '小陷胸汤', jing: '太阳', category: '清热化痰剂', composition: '黄连一两 半夏半升 栝楼实大者一枚', usage: '清热化痰开结。小结胸证正在心下按之则痛脉浮滑。', neihanNote: '痰热互结轻证，连夏蒌清热化痰宽胸。' },
+  { name: '旋覆代赭汤', jing: '太阳', category: '降逆剂', composition: '旋覆花三两 代赭石一两 人参二两 半夏半升 甘草三两 生姜五两 大枣十二枚', usage: '降逆化痰，益气和胃。心下痞硬噫气不除。', neihanNote: '胃虚痰阻，旋覆花下气，代赭石重镇。生姜用量独重。' },
+  { name: '半夏泻心汤', jing: '太阳', category: '消痞剂', composition: '半夏半升 黄芩 干姜 人参 甘草各三两 黄连一两 大枣十二枚', usage: '和胃降逆，消痞散结。心下痞满不痛。', neihanNote: '辛开苦降甘调，寒热并用之典范。' },
+  { name: '生姜泻心汤', jing: '太阳', category: '消痞剂', composition: '半夏泻心汤减干姜为二两加生姜四两', usage: '和胃消痞，宣散水气。心下痞硬干噫食臭腹中雷鸣下利。', neihanNote: '水饮食滞，重用生姜散水气。' },
+  { name: '甘草泻心汤', jing: '太阳', category: '消痞剂', composition: '半夏泻心汤加重甘草至四两', usage: '和胃补中，消痞止利。下利日数十行谷不化心下痞硬而满。', neihanNote: '胃虚痞利俱重，重用甘草补中。' },
+  { name: '大黄黄连泻心汤', jing: '太阳', category: '清热剂', composition: '大黄二两 黄连一两', usage: '清热消痞。心下痞按之濡脉关上浮。', neihanNote: '热痞。麻沸汤浸渍取气不取味。' },
+  { name: '附子泻心汤', jing: '太阳', category: '清热温阳剂', composition: '大黄二两 黄连一两 黄芩一两 炮附子一枚', usage: '清热消痞，扶阳固表。心下痞而复恶寒汗出。', neihanNote: '热痞兼阳虚，三黄渍取气附子煮取味。寒热并用之典范。' },
+  { name: '小建中汤', jing: '太阳', category: '温里剂', composition: '桂枝汤倍芍药加饴糖一升', usage: '温中补虚，和里缓急。腹中急痛。', neihanNote: '饴糖甘温建中为君，芍药倍用缓急止痛。' },
+  { name: '桂枝附子汤', jing: '太阳', category: '祛风湿剂', composition: '桂枝四两 炮附子三枚 生姜三两 大枣十二枚 甘草二两', usage: '温经散寒，祛风除湿。风湿相搏身体疼烦不能自转侧。', neihanNote: '桂枝附子并用温经散寒力强，治风湿在表。' },
+  { name: '甘草附子汤', jing: '太阳', category: '祛风湿剂', composition: '甘草二两 炮附子二枚 白术二两 桂枝四两', usage: '温经散寒，祛湿止痛。风湿相搏骨节疼烦掣痛不得屈伸。', neihanNote: '风湿在关节，术附祛湿桂通阳草缓急。' },
+  // ===== 阳明病方 =====
+  { name: '白虎汤', jing: '阳明', category: '清热剂', composition: '知母六两 石膏一斤 甘草二两 粳米六合', usage: '清热生津。阳明经证大热大汗大渴脉洪大。', neihanNote: '石膏一斤为君清热力宏，知母助清热滋阴，粳米甘草护胃。' },
+  { name: '白虎加人参汤', jing: '阳明', category: '清热剂', composition: '白虎汤加人参三两', usage: '清热益气生津。阳明热盛气津两伤。', neihanNote: '大热伤津耗气，加人参益气生津。' },
+  { name: '大承气汤', jing: '阳明', category: '泻下剂', composition: '大黄四两 厚朴八两 枳实五枚 芒硝三合', usage: '峻下热结。阳明腑实痞满燥实俱备。', neihanNote: '先煮枳朴后入大黄最后溶芒硝。得下余勿服。' },
+  { name: '小承气汤', jing: '阳明', category: '泻下剂', composition: '大黄四两 厚朴二两 枳实三枚', usage: '轻下热结。阳明腑实便硬腹大满不通。', neihanNote: '无芒硝，力较大承气汤缓。' },
+  { name: '调胃承气汤', jing: '阳明', category: '泻下剂', composition: '大黄四两 甘草二两 芒硝半升', usage: '缓下热结，调和胃气。阳明燥热初结。', neihanNote: '甘草缓大黄芒硝之急下，重在和胃。' },
+  { name: '茵陈蒿汤', jing: '阳明', category: '利湿退黄剂', composition: '茵陈蒿六两 栀子十四枚 大黄二两', usage: '清热利湿退黄。阳明湿热发黄身黄如橘子色。', neihanNote: '茵陈为君利湿退黄，栀子清三焦，大黄导热下行。先煮茵陈。' },
+  { name: '猪苓汤', jing: '阳明', category: '利水剂', composition: '猪苓 茯苓 泽泻 阿胶 滑石各一两', usage: '利水清热养阴。水热互结小便不利渴欲饮水。', neihanNote: '阿胶滋阴，滑石清利。与五苓散区别在有阴伤。' },
+  { name: '麻子仁丸', jing: '阳明', category: '润下剂', composition: '麻子仁二升 芍药八两 枳实八两 大黄一斤 厚朴一尺 杏仁一升', usage: '润肠通便。脾约证小便数大便硬。', neihanNote: '胃强脾弱津液偏渗膀胱。蜜丸缓下。' },
+  // ===== 少阳病方 =====
+  { name: '小柴胡汤', jing: '少阳', category: '和解剂', composition: '柴胡八两 黄芩三两 人参三两 半夏半升 甘草三两 生姜三两 大枣十二枚', usage: '和解少阳。往来寒热胸胁苦满默默不欲饮食心烦喜呕。', neihanNote: '柴胡八两为君量大效专。但见一证便是，不必悉具。' },
+  { name: '大柴胡汤', jing: '少阳', category: '和解剂', composition: '柴胡八两 黄芩三两 芍药三两 半夏半升 生姜五两 枳实四枚 大黄二两 大枣十二枚', usage: '和解少阳，内泄热结。少阳阳明合病呕不止心下急。', neihanNote: '少阳兼阳明里实，去人参甘草以免留邪。' },
+  { name: '柴胡桂枝汤', jing: '少阳', category: '和解剂', composition: '小柴胡汤与桂枝汤各半量合方', usage: '和解少阳，兼解表邪。太阳少阳合病。', neihanNote: '太少合病双解之方。' },
+  { name: '柴胡加龙骨牡蛎汤', jing: '少阳', category: '和解安神剂', composition: '小柴胡汤加减加龙骨牡蛎铅丹桂枝茯苓大黄', usage: '和解少阳，镇惊安神。胸满烦惊小便不利谵语一身尽重。', neihanNote: '邪陷少阳兼心神不宁。龙牡铅丹重镇安神。' },
+  // ===== 太阴病方 =====
+  { name: '理中汤', jing: '太阴', category: '温里剂', composition: '人参 干姜 白术 甘草各三两', usage: '温中散寒，补气健脾。太阴病腹满而吐食不下自利益甚。', neihanNote: '干姜温中散寒为君，参术草益气健脾。丸剂为理中丸。' },
+  { name: '桂枝加芍药汤', jing: '太阴', category: '和解剂', composition: '桂枝汤倍芍药至六两', usage: '和脾止痛。太阳病误下后腹满时痛。', neihanNote: '芍药倍用柔肝和脾缓急止痛。' },
+  { name: '桂枝加大黄汤', jing: '太阴', category: '攻补兼施', composition: '桂枝汤倍芍药加大黄二两', usage: '和脾通下。腹满大实痛。', neihanNote: '太阴腹痛兼实滞，芍药和营大黄通下。' },
+  // ===== 少阴病方 =====
+  { name: '四逆汤', jing: '少阴', category: '温里剂', composition: '生附子一枚 干姜一两半 甘草二两', usage: '回阳救逆。少阴寒化四肢厥逆下利清谷脉微欲绝。', neihanNote: '生附子破阴回阳为君，干姜温中为臣，甘草解毒缓急。' },
+  { name: '通脉四逆汤', jing: '少阴', category: '温里剂', composition: '生附子大者一枚 干姜三两 甘草二两', usage: '破阴回阳，通达内外。下利清谷手足厥逆脉微欲绝身反不恶寒面赤。', neihanNote: '阴盛格阳戴阳证。重用姜附破阴回阳。' },
+  { name: '白通汤', jing: '少阴', category: '温里剂', composition: '生附子一枚 干姜一两 葱白四茎', usage: '破阴回阳，宣通上下。少阴病下利脉微面赤。', neihanNote: '葱白通阳破阴，治戴阳于上。' },
+  { name: '真武汤', jing: '少阴', category: '温阳利水剂', composition: '茯苓三两 芍药三两 生姜三两 白术二两 炮附子一枚', usage: '温阳利水。肾阳虚水泛小便不利水肿身瞤动。', neihanNote: '附子温肾阳为君，苓术健脾利水，生姜散水气，芍药敛阴防燥。' },
+  { name: '附子汤', jing: '少阴', category: '温阳剂', composition: '炮附子二枚 茯苓三两 人参二两 白术四两 芍药三两', usage: '温经扶阳，除湿止痛。少阴病身体痛手足寒骨节疼脉沉。', neihanNote: '重用附子白术温经祛湿，人参益气扶正。' },
+  { name: '黄连阿胶汤', jing: '少阴', category: '安神剂', composition: '黄连四两 黄芩二两 芍药二两 阿胶三两 鸡子黄二枚', usage: '滋阴降火，交通心肾。心中烦不得卧。', neihanNote: '泻南补北。芩连泻心火，阿胶鸡子黄滋肾水。' },
+  { name: '桔梗汤', jing: '少阴', category: '清热剂', composition: '桔梗一两 甘草二两', usage: '宣肺祛痰，利咽解毒。少阴咽痛。', neihanNote: '' },
+  { name: '苦酒汤', jing: '少阴', category: '清热剂', composition: '半夏十四枚 鸡子一枚去黄 苦酒适量', usage: '清热利咽，敛疮消肿。咽中伤生疮不能语言声不出。', neihanNote: '苦酒即醋，敛疮消肿。' },
+  { name: '半夏散及汤', jing: '少阴', category: '温散剂', composition: '半夏 桂枝 甘草各等分', usage: '散寒通阳，利咽止痛。少阴病咽中痛。', neihanNote: '寒客少阴经脉咽痛，桂枝散寒半夏开结。' },
+  { name: '麻黄细辛附子汤', jing: '少阴', category: '助阳解表剂', composition: '麻黄二两 细辛二两 炮附子一枚', usage: '温经解表。少阴病始得之反发热脉沉。', neihanNote: '太少两感。温阳与解表并行。' },
+  { name: '桃花汤', jing: '少阴', category: '固涩剂', composition: '赤石脂一斤 干姜一两 粳米一升', usage: '温中涩肠止利。少阴病下利便脓血。', neihanNote: '赤石脂一半煎一半为末冲服，涩肠固脱。' },
+  { name: '猪肤汤', jing: '少阴', category: '滋阴剂', composition: '猪肤一斤', usage: '滋阴润燥。少阴病下利咽痛胸满心烦。', neihanNote: '猪肤即猪皮，滋阴润肺利咽。' },
+  // ===== 厥阴病方 =====
+  { name: '乌梅丸', jing: '厥阴', category: '驱虫剂', composition: '乌梅三百枚 细辛六两 干姜十两 黄连十六两 当归四两 炮附子六两 蜀椒四两 桂枝六两 人参六两 黄柏六两', usage: '安蛔止痛，寒热并调。厥阴病吐蛔又治久利。', neihanNote: '酸苦辛甘并用的复杂大方。乌梅酸能安蛔。' },
+  { name: '吴茱萸汤', jing: '厥阴', category: '温里剂', composition: '吴茱萸一升 人参三两 生姜六两 大枣十二枚', usage: '温中补虚，降逆止呕。干呕吐涎沫头痛。', neihanNote: '吴茱萸暖肝胃降逆，生姜大量散寒止呕。' },
+  { name: '白头翁汤', jing: '厥阴', category: '清热剂', composition: '白头翁二两 黄连三两 黄柏三两 秦皮三两', usage: '清热燥湿，凉血止利。热利下重。', neihanNote: '厥阴热利专方，肝经湿热下迫大肠。' },
+  { name: '当归四逆汤', jing: '厥阴', category: '温经剂', composition: '当归三两 桂枝三两 芍药三两 细辛三两 甘草二两 通草二两 大枣二十五枚', usage: '温经散寒，养血通脉。手足厥寒脉细欲绝。', neihanNote: '血虚寒凝致厥，不用姜附而用归芍养血通脉。' },
+  // ===== 胸痹及其他 =====
+  { name: '栝楼薤白白酒汤', jing: '胸痹', category: '理气剂', composition: '栝楼实一枚 薤白半升 白酒七升', usage: '通阳散结，豁痰下气。胸痹喘息咳唾胸背痛短气。', neihanNote: '白酒通阳，薤白辛温开痹，栝楼化痰宽胸。' },
+  { name: '栝楼薤白半夏汤', jing: '胸痹', category: '理气剂', composition: '上方加半夏半升', usage: '通阳散结，祛痰宽胸。胸痹不得卧心痛彻背。', neihanNote: '痰浊更重加半夏化痰降逆。' },
+  { name: '炙甘草汤', jing: '太阳', category: '补益剂', composition: '炙甘草四两 生姜三两 人参二两 生地黄一斤 桂枝三两 阿胶二两 麦冬半升 麻仁半升 大枣三十枚', usage: '益气滋阴，通阳复脉。心动悸脉结代。', neihanNote: '重用生地一斤滋阴养血，炙甘草四两益气复脉。清酒煎。' },
+  { name: '芍药甘草汤', jing: '太阳', category: '补益剂', composition: '芍药四两 甘草四两', usage: '酸甘化阴，缓急止痛。脚挛急腹中痛。', neihanNote: '芍药甘草酸甘化阴，柔筋止痛基础方。' },
+  { name: '厚朴生姜半夏甘草人参汤', jing: '太阳', category: '理气剂', composition: '厚朴八两 生姜八两 半夏半升 甘草二两 人参一两', usage: '行气除满，健脾和胃。发汗后腹胀满。', neihanNote: '厚朴生姜宣通气滞，人参甘草补虚。消补兼施。' },
 ];
-
 function renderFormulas() {
   const query = (document.getElementById('formula-search')?.value || '').toLowerCase();
   const list = document.getElementById('formula-list');
@@ -659,28 +709,87 @@ function renderFormulas() {
 // ===== Herbs =====
 
 const herbsData = [
-  { name: '桂枝', pinyin: 'Guì Zhī', nature: '辛、甘，温', meridian: '心、肺、膀胱', category: '解表药·发散风寒', usage: '发汗解表，温经通阳。用于风寒表证、寒凝血滞、痰饮、蓄水证等。', neihanNote: '倪海厦强调桂枝温通心阳的作用，桂枝汤是群方之冠。' },
-  { name: '麻黄', pinyin: 'Má Huáng', nature: '辛、微苦，温', meridian: '肺、膀胱', category: '解表药·发散风寒', usage: '发汗解表，宣肺平喘，利水消肿。用于伤寒表实证。', neihanNote: '麻黄发汗力强，有"麻黄发汗第一"之说。先煮去上沫。' },
-  { name: '石膏', pinyin: 'Shí Gāo', nature: '辛、甘，大寒', meridian: '肺、胃', category: '清热药·清热泻火', usage: '清热泻火，除烦止渴。用于阳明经证大热大汗。', neihanNote: '倪师强调石膏要重用才有效，"石膏一斤始为白虎"。' },
-  { name: '知母', pinyin: 'Zhī Mǔ', nature: '苦、甘，寒', meridian: '肺、胃、肾', category: '清热药·清热泻火', usage: '清热泻火，滋阴润燥。用于气分实热、阴虚发热。', neihanNote: '' },
-  { name: '柴胡', pinyin: 'Chái Hú', nature: '苦、辛，微寒', meridian: '肝、胆', category: '解表药·发散风热', usage: '和解少阳，疏肝解郁，升举阳气。用于少阳病。', neihanNote: '小柴胡汤主药，和解半表半里之邪。剂量宜大，八两起。' },
-  { name: '黄芩', pinyin: 'Huáng Qín', nature: '苦，寒', meridian: '肺、胆、胃、大肠', category: '清热药·清热燥湿', usage: '清热燥湿，泻火解毒，止血安胎。常配柴胡清少阳之热。', neihanNote: '倪师常用于清上焦及少阳郁热。' },
-  { name: '大黄', pinyin: 'Dà Huáng', nature: '苦，寒', meridian: '脾、胃、大肠、肝、心包', category: '泻下药', usage: '泻热通便，凉血解毒，逐瘀通经。用于阳明腑实证。', neihanNote: '承气汤之主药，下燥屎必用。酒大黄活血力强。' },
-  { name: '芒硝', pinyin: 'Máng Xiāo', nature: '咸、苦，寒', meridian: '胃、大肠', category: '泻下药', usage: '泻热通便，润燥软坚。常配大黄增强泻下之力。', neihanNote: '大承气汤中芒硝软坚散结，治燥屎。' },
-  { name: '厚朴', pinyin: 'Hòu Pǔ', nature: '苦、辛，温', meridian: '脾、胃、肺、大肠', category: '理气药', usage: '行气消积，燥湿除满，降逆平喘。', neihanNote: '' },
-  { name: '枳实', pinyin: 'Zhǐ Shí', nature: '苦、辛，微寒', meridian: '脾、胃、大肠', category: '理气药', usage: '破气消积，化痰散痞。常配厚朴行气导滞。', neihanNote: '' },
-  { name: '干姜', pinyin: 'Gān Jiāng', nature: '辛，热', meridian: '脾、胃、心、肺', category: '温里药', usage: '温中散寒，回阳通脉，温肺化饮。', neihanNote: '倪师认为干姜守而不走，治里寒；生姜走而不守，散表寒。' },
-  { name: '附子', pinyin: 'Fù Zǐ', nature: '辛、甘，大热，有毒', meridian: '心、肾、脾', category: '温里药', usage: '回阳救逆，补火助阳，散寒止痛。四逆汤主药。', neihanNote: '生附子回阳救逆，炮附子温补肾阳。久煎去毒。' },
-  { name: '人参', pinyin: 'Rén Shēn', nature: '甘、微苦，平', meridian: '脾、肺、心', category: '补气药', usage: '大补元气，补脾益肺，生津安神。', neihanNote: '伤寒方中用于扶正，小柴胡汤和理中汤都用人参。' },
-  { name: '甘草', pinyin: 'Gān Cǎo', nature: '甘，平', meridian: '心、肺、脾、胃', category: '补气药', usage: '补脾益气，清热解毒，祛痰止咳，缓急止痛，调和诸药。', neihanNote: '伤寒方中出现频率最高的药物之一，炙甘草偏补，生甘草偏清。' },
-  { name: '芍药', pinyin: 'Sháo Yào', nature: '苦、酸，微寒', meridian: '肝、脾', category: '补血药', usage: '养血敛阴，柔肝止痛，平抑肝阳。', neihanNote: '白芍养血柔肝，赤芍活血化瘀。桂枝汤用白芍敛阴和营。' },
-  { name: '半夏', pinyin: 'Bàn Xià', nature: '辛，温，有毒', meridian: '脾、胃、肺', category: '化痰药', usage: '燥湿化痰，降逆止呕，消痞散结。', neihanNote: '半夏泻心汤主药，治心下痞。' },
-  { name: '黄连', pinyin: 'Huáng Lián', nature: '苦，寒', meridian: '心、肝、胃、大肠', category: '清热药·清热燥湿', usage: '清热燥湿，泻火解毒。用于心火亢盛、心烦不眠。', neihanNote: '黄连阿胶汤中用黄连泻心火，配合阿胶滋阴。' },
-  { name: '阿胶', pinyin: 'Ē Jiāo', nature: '甘，平', meridian: '肺、肝、肾', category: '补血药', usage: '补血滋阴，润燥止血。', neihanNote: '黄连阿胶汤中用阿胶滋肾水，交通心肾。烊化冲服。' },
-  { name: '杏仁', pinyin: 'Xìng Rén', nature: '苦，微温，有小毒', meridian: '肺、大肠', category: '止咳平喘药', usage: '降气止咳平喘，润肠通便。麻黄汤中配麻黄宣降肺气。', neihanNote: '' },
-  { name: '大枣', pinyin: 'Dà Zǎo', nature: '甘，温', meridian: '脾、胃', category: '补气药', usage: '补中益气，养血安神，缓和药性。常配生姜调营卫。', neihanNote: '伤寒方中常与生姜配对，调和营卫，保护胃气。' },
-];
+  // ===== 解表药 =====
+  { name: '桂枝', pinyin: 'Guì Zhī', nature: '辛、甘，温', meridian: '心、肺、膀胱', category: '解表药·发散风寒', usage: '发汗解表，温经通阳。风寒表证、寒凝血滞、痰饮蓄水。', neihanNote: '温通心阳，桂枝汤群方之冠。枝达四肢，横行手臂。' },
+  { name: '麻黄', pinyin: 'Má Huáng', nature: '辛、微苦，温', meridian: '肺、膀胱', category: '解表药·发散风寒', usage: '发汗解表，宣肺平喘，利水消肿。伤寒表实无汗。', neihanNote: '发汗第一药。先煮去上沫，否则令人心烦。' },
+  { name: '生姜', pinyin: 'Shēng Jiāng', nature: '辛，微温', meridian: '肺、脾、胃', category: '解表药·发散风寒', usage: '发汗解表，温中止呕，温肺止咳。风寒表证及胃寒呕吐。', neihanNote: '走而不守散表寒。与大枣配对调和营卫。呕家圣药。' },
+  { name: '葛根', pinyin: 'Gě Gēn', nature: '甘、辛，平', meridian: '脾、胃', category: '解表药·发散风热', usage: '解肌退热，升津舒筋，透疹止泻。项背强几几。', neihanNote: '升津液濡筋脉，治项背拘急不舒。' },
+  { name: '柴胡', pinyin: 'Chái Hú', nature: '苦、辛，微寒', meridian: '肝、胆', category: '解表药·发散风热', usage: '和解少阳，疏肝解郁，升举阳气。少阳病往来寒热胸胁苦满。', neihanNote: '小柴胡汤主药。半表半里之邪非柴胡不能解。用量宜大小则无效。' },
+  { name: '细辛', pinyin: 'Xì Xīn', nature: '辛，温，有小毒', meridian: '肺、肾', category: '解表药·发散风寒', usage: '散寒解表，温肺化饮，通窍止痛。少阴头痛牙痛。', neihanNote: '达肾经搜伏寒。小青龙汤合干姜五味子温肺化饮。用量不宜过大。' },
 
+  // ===== 清热药 =====
+  { name: '石膏', pinyin: 'Shí Gāo', nature: '辛、甘，大寒', meridian: '肺、胃', category: '清热药·清热泻火', usage: '清热泻火，除烦止渴。阳明经证大热大汗大渴脉洪大。', neihanNote: '白虎汤君药，用量要大。一斤始为白虎，三两不过清轻热。' },
+  { name: '知母', pinyin: 'Zhī Mǔ', nature: '苦、甘，寒', meridian: '肺、胃、肾', category: '清热药·清热泻火', usage: '清热泻火，滋阴润燥。气分实热、阴虚发热、消渴。', neihanNote: '上清肺金，下滋肾水。白虎汤中助石膏清热滋阴。' },
+  { name: '栀子', pinyin: 'Zhī Zǐ', nature: '苦，寒', meridian: '心、肝、肺、胃、三焦', category: '清热药·清热泻火', usage: '泻火除烦，清热利湿，凉血解毒。热病心烦懊恼。', neihanNote: '清三焦之火。栀子豉汤治虚烦不得眠。' },
+  { name: '黄芩', pinyin: 'Huáng Qín', nature: '苦，寒', meridian: '肺、胆、胃、大肠', category: '清热药·清热燥湿', usage: '清热燥湿，泻火解毒，止血安胎。少阳热、肺热咳嗽。', neihanNote: '清上焦及少阳之热。小柴胡汤中配柴胡一清一散。' },
+  { name: '黄连', pinyin: 'Huáng Lián', nature: '苦，寒', meridian: '心、肝、胃、大肠', category: '清热药·清热燥湿', usage: '清热燥湿，泻火解毒。心火亢盛心烦不眠、湿热痞满。', neihanNote: '苦寒直折心火。黄连阿胶汤泻南补北。半夏泻心汤辛开苦降。' },
+  { name: '黄柏', pinyin: 'Huáng Bò', nature: '苦，寒', meridian: '肾、膀胱、大肠', category: '清热药·清热燥湿', usage: '清热燥湿，泻火解毒，退虚热。下焦湿热、阴虚发热。', neihanNote: '清下焦相火。知柏配知母滋阴降火。' },
+  { name: '白头翁', pinyin: 'Bái Tóu Wēng', nature: '苦，寒', meridian: '胃、大肠', category: '清热药·清热解毒', usage: '清热解毒，凉血止利。热毒血痢。', neihanNote: '厥阴热利专药。白头翁汤为热利下重要方。' },
+  { name: '秦皮', pinyin: 'Qín Pí', nature: '苦、涩，寒', meridian: '肝、胆、大肠', category: '清热药·清热燥湿', usage: '清热燥湿，收涩止利，清肝明目。热利、目赤肿痛。', neihanNote: '' },
+
+  // ===== 泻下药 =====
+  { name: '大黄', pinyin: 'Dà Huáng', nature: '苦，寒', meridian: '脾、胃、大肠、肝、心包', category: '泻下药', usage: '泻热通便，凉血解毒，逐瘀通经。阳明腑实证便秘。', neihanNote: '推陈致新如将军。酒大黄活血，生大黄泻下。后下力宏。' },
+  { name: '芒硝', pinyin: 'Máng Xiāo', nature: '咸、苦，寒', meridian: '胃、大肠', category: '泻下药', usage: '泻热通便，润燥软坚。燥屎内结腹满痛。', neihanNote: '软坚散结治燥屎。大承气汤中后下烊化。' },
+
+  // ===== 祛风湿药 =====
+  { name: '附子', pinyin: 'Fù Zǐ', nature: '辛、甘，大热，有毒', meridian: '心、肾、脾', category: '温里药', usage: '回阳救逆，补火助阳，散寒止痛。四逆汤主药。', neihanNote: '生附子破阴回阳力峻。炮附子温补肾阳。须久煎一小时以上去毒。' },
+  { name: '干姜', pinyin: 'Gān Jiāng', nature: '辛，热', meridian: '脾、胃、心、肺', category: '温里药', usage: '温中散寒，回阳通脉，温肺化饮。脾胃虚寒、寒饮咳嗽。', neihanNote: '守而不走。生姜走而不守散表寒，干姜守而不走温里寒。' },
+  { name: '吴茱萸', pinyin: 'Wú Zhū Yú', nature: '辛、苦，热，有小毒', meridian: '肝、脾、胃、肾', category: '温里药', usage: '温中止痛，降逆止呕。肝胃虚寒头痛干呕吐涎沫。', neihanNote: '吴茱萸汤治厥阴头痛。入肝经暖肝散寒。' },
+  { name: '蜀椒', pinyin: 'Shǔ Jiāo', nature: '辛，温', meridian: '脾、胃、肾', category: '温里药', usage: '温中止痛，驱虫。脘腹冷痛、虫积腹痛。', neihanNote: '乌梅丸中用蜀椒温中安蛔。' },
+
+  // ===== 利水渗湿药 =====
+  { name: '茯苓', pinyin: 'Fú Líng', nature: '甘、淡，平', meridian: '心、脾、肾', category: '利水渗湿药', usage: '利水渗湿，健脾宁心。小便不利水肿、心悸失眠。', neihanNote: '淡渗利湿不伤正。苓桂术甘汤健脾利水。' },
+  { name: '猪苓', pinyin: 'Zhū Líng', nature: '甘、淡，平', meridian: '肾、膀胱', category: '利水渗湿药', usage: '利水渗湿。小便不利水肿泄泻。', neihanNote: '利水力强于茯苓。五苓散合泽泻利水。' },
+  { name: '泽泻', pinyin: 'Zé Xiè', nature: '甘、淡，寒', meridian: '肾、膀胱', category: '利水渗湿药', usage: '利水渗湿，泄热。水肿小便不利、痰饮眩晕。', neihanNote: '利水兼泄肾经虚火。五苓散用泽泻利水泄热。' },
+  { name: '茵陈蒿', pinyin: 'Yīn Chén Hāo', nature: '苦，微寒', meridian: '脾、胃、肝、胆', category: '利湿退黄药', usage: '清热利湿，利胆退黄。湿热黄疸身黄如橘子色。', neihanNote: '黄疸专药。茵陈蒿汤为阳明发黄主方。先煮茵陈。' },
+  { name: '滑石', pinyin: 'Huá Shí', nature: '甘、淡，寒', meridian: '胃、膀胱', category: '利水渗湿药', usage: '清热利湿，解暑。小便不利淋沥涩痛。', neihanNote: '猪苓汤中用滑石清利湿热。' },
+
+  // ===== 化痰止咳平喘药 =====
+  { name: '半夏', pinyin: 'Bàn Xià', nature: '辛，温，有毒', meridian: '脾、胃、肺', category: '化痰止咳平喘药', usage: '燥湿化痰，降逆止呕，消痞散结。痰多咳嗽、呕吐、心下痞。', neihanNote: '半夏泻心汤主药。生半夏化痰力强，制半夏毒性低。' },
+  { name: '杏仁', pinyin: 'Xìng Rén', nature: '苦，微温，有小毒', meridian: '肺、大肠', category: '止咳平喘药', usage: '降气止咳平喘，润肠通便。咳嗽气喘、肠燥便秘。', neihanNote: '麻黄汤中配麻黄一宣一降。' },
+  { name: '桔梗', pinyin: 'Jú Gěng', nature: '苦、辛，平', meridian: '肺', category: '化痰药', usage: '宣肺祛痰，利咽排脓。咳嗽痰多咽痛音哑、肺痈。', neihanNote: '载药上行，为舟楫之剂。桔梗汤治少阴咽痛。' },
+  { name: '栝楼实', pinyin: 'Guā Lóu Shí', nature: '甘，寒', meridian: '肺、胃、大肠', category: '化痰药', usage: '清肺化痰，宽胸散结，润肠通便。胸痹、热痰咳嗽。', neihanNote: '栝楼薤白白酒汤治胸痹。全栝楼宽胸力更佳。' },
+  { name: '川贝母', pinyin: 'Chuān Bèi Mǔ', nature: '甘、苦，微寒', meridian: '肺、心', category: '化痰止咳药', usage: '清热化痰，润肺止咳，散结消肿。阴虚燥咳。', neihanNote: '' },
+
+  // ===== 理气药 =====
+  { name: '厚朴', pinyin: 'Hòu Pǔ', nature: '苦、辛，温', meridian: '脾、胃、肺、大肠', category: '理气药', usage: '行气消积，燥湿除满，降逆平喘。腹胀便秘、咳喘。', neihanNote: '大承气汤中行气导滞除腹满。' },
+  { name: '枳实', pinyin: 'Zhǐ Shí', nature: '苦、辛，微寒', meridian: '脾、胃、大肠', category: '理气药', usage: '破气消积，化痰散痞。食积气滞、胸痹痞满。', neihanNote: '承气汤中与厚朴相须行气。' },
+  { name: '薤白', pinyin: 'Xiè Bái', nature: '辛、苦，温', meridian: '肺、胃、大肠', category: '理气药', usage: '通阳散结，行气导滞。胸痹心痛彻背。', neihanNote: '栝楼薤白白酒汤治胸痹。辛温通阳开痹。' },
+  { name: '旋覆花', pinyin: 'Xuán Fù Huā', nature: '苦、辛、咸，微温', meridian: '肺、脾、胃、大肠', category: '化痰药', usage: '降气化痰，降逆止呕。咳喘痰多、噫气呕吐。', neihanNote: '旋覆代赭汤治心下痞硬噫气不除。诸花皆升旋覆独降。' },
+
+  // ===== 活血化瘀药 =====
+  { name: '桃仁', pinyin: 'Táo Rén', nature: '苦、甘，平', meridian: '心、肝、大肠', category: '活血化瘀药', usage: '活血祛瘀，润肠通便。血瘀经闭、蓄血证。', neihanNote: '桃核承气汤治太阳蓄血少腹急结。' },
+
+  // ===== 补气药 =====
+  { name: '人参', pinyin: 'Rén Shēn', nature: '甘、微苦，平', meridian: '脾、肺、心', category: '补气药', usage: '大补元气，补脾益肺，生津安神。气虚欲脱、脾胃虚弱。', neihanNote: '小柴胡汤理中汤用之扶正。白虎加人参汤益气生津。' },
+  { name: '甘草', pinyin: 'Gān Cǎo', nature: '甘，平', meridian: '心、肺、脾、胃', category: '补气药', usage: '补脾益气，清热解毒，祛痰止咳，缓急止痛，调和诸药。', neihanNote: '经方中出现频率最高。炙甘草偏补，生甘草偏清。甘草泻心汤重用至四两。' },
+  { name: '白术', pinyin: 'Bái Shù', nature: '甘、苦，温', meridian: '脾、胃', category: '补气药', usage: '补气健脾，燥湿利水，止汗安胎。脾胃虚弱水肿。', neihanNote: '理中汤真武汤五苓散均有白术健脾祛湿。' },
+  { name: '大枣', pinyin: 'Dà Zǎo', nature: '甘，温', meridian: '脾、胃', category: '补气药', usage: '补中益气，养血安神，缓和药性。脾胃虚弱血虚脏躁。', neihanNote: '常与生姜配对调和营卫，保护胃气。' },
+  { name: '山药', pinyin: 'Shān Yào', nature: '甘，平', meridian: '脾、肺、肾', category: '补气药', usage: '补脾养胃，生津益肺，补肾涩精。脾虚食少、肺虚咳喘。', neihanNote: '薯蓣丸中用山药补脾肺肾三脏。' },
+  { name: '粳米', pinyin: 'Jīng Mǐ', nature: '甘，平', meridian: '脾、胃', category: '补气药', usage: '补中益气，健脾和胃。白虎汤竹叶石膏汤中用之护胃。', neihanNote: '白虎汤中粳米合甘草益气护胃，防石膏寒凉伤中。' },
+
+  // ===== 补血药 =====
+  { name: '芍药', pinyin: 'Sháo Yào', nature: '苦、酸，微寒', meridian: '肝、脾', category: '补血药', usage: '养血敛阴，柔肝止痛，平抑肝阳。血虚月经不调、腹痛。', neihanNote: '白芍养血柔肝，赤芍活血化瘀。桂枝汤白芍敛阴和营。芍药甘草汤缓急止痛。' },
+  { name: '当归', pinyin: 'Dāng Guī', nature: '甘、辛，温', meridian: '肝、心、脾', category: '补血药', usage: '补血活血，调经止痛，润肠通便。血虚月经不调。', neihanNote: '当归四逆汤治血虚寒厥。补血兼活血。' },
+  { name: '阿胶', pinyin: 'Ē Jiāo', nature: '甘，平', meridian: '肺、肝、肾', category: '补血药', usage: '补血滋阴，润燥止血。血虚、阴虚心烦不眠。', neihanNote: '黄连阿胶汤滋肾水交通心肾。烊化冲服不宜煎煮。' },
+  { name: '生地黄', pinyin: 'Shēng Dì Huáng', nature: '甘、苦，寒', meridian: '心、肝、肾', category: '清热凉血药', usage: '清热凉血，养阴生津。热入营血阴虚内热。', neihanNote: '炙甘草汤用生地黄一斤滋阴养血复脉。' },
+
+  // ===== 收涩药 =====
+  { name: '五味子', pinyin: 'Wǔ Wèi Zǐ', nature: '酸、甘，温', meridian: '肺、心、肾', category: '收涩药', usage: '收敛固涩，益气生津，补肾宁心。久咳虚喘、自汗盗汗。', neihanNote: '小青龙汤中与干姜细辛配对，散中有收。' },
+  { name: '乌梅', pinyin: 'Wū Méi', nature: '酸、涩，平', meridian: '肝、脾、肺、大肠', category: '收涩药', usage: '敛肺止咳，涩肠止泻，安蛔止痛，生津止渴。久咳久利、蛔厥。', neihanNote: '乌梅丸君药，酸能安蛔。又治久利。' },
+  { name: '赤石脂', pinyin: 'Chì Shí Zhī', nature: '甘、酸、涩，温', meridian: '胃、大肠', category: '收涩药', usage: '涩肠止泻，收敛止血，敛疮生肌。久泻久利、便血。', neihanNote: '桃花汤中用赤石脂涩肠固脱，一半煎汤一半为末冲服。' },
+
+  // ===== 平肝熄风药 =====
+  { name: '代赭石', pinyin: 'Dài Zhě Shí', nature: '苦，寒', meridian: '肝、心', category: '平肝熄风药', usage: '平肝潜阳，重镇降逆，凉血止血。噫气呕吐、眩晕。', neihanNote: '旋覆代赭汤治噫气不除。重镇降逆。' },
+  { name: '龙骨', pinyin: 'Lóng Gǔ', nature: '甘、涩，平', meridian: '心、肝、肾', category: '安神药', usage: '镇惊安神，平肝潜阳，收敛固涩。心悸失眠、自汗。', neihanNote: '柴胡加龙骨牡蛎汤治烦惊谵语。' },
+  { name: '牡蛎', pinyin: 'Mǔ Lì', nature: '咸、涩，微寒', meridian: '肝、肾', category: '平肝熄风药', usage: '平肝潜阳，软坚散结，收敛固涩。惊悸失眠、瘰疬。', neihanNote: '柴胡加龙骨牡蛎汤中用之安神定惊。' },
+
+  // ===== 驱虫药 =====
+  { name: '使君子', pinyin: 'Shǐ Jūn Zǐ', nature: '甘，温', meridian: '脾、胃', category: '驱虫药', usage: '杀虫消积。蛔虫腹痛、小儿疳积。', neihanNote: '' },
+
+  // ===== 外用药 =====
+  { name: '雄黄', pinyin: 'Xióng Huáng', nature: '辛，温，有毒', meridian: '肝、大肠', category: '外用药', usage: '解毒杀虫，燥湿祛痰。痈肿疔疮、虫蛇咬伤。', neihanNote: '升麻鳖甲汤中用雄黄解毒。不可久服。' },
+];
 function renderHerbs() {
   const query = (document.getElementById('herb-search')?.value || '').toLowerCase();
   const list = document.getElementById('herb-list');
